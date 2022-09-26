@@ -8,6 +8,7 @@ from firebase_admin import db
 
 from indicator import ema
 from lib import pair_decimal as pair_decimal
+from lib.fcm import send_notif
 
 
 def get_best_min_ema(pair, multiplier, timespan):
@@ -216,6 +217,7 @@ def sendnotify(notify, type_trade, pair, price):
     ref.child(str(current_time_ms)).set({
         'messages': messages
     })
+    send_notif("test", pair, messages)
 
 
 def emaclose_xvolume(pair, data, ema, min_ema_diff, volumestart, volumeend, reversal=True, notify=''):

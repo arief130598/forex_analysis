@@ -17,21 +17,21 @@ def get_volume(pair_data, multiplier_data, timespan_data):
     if timespan_data == 'h':
         if multiplier_data == '1':
             if pair_data == 'AUDUSD':
-                return 7826
+                return 6852
             elif pair_data == 'EURUSD':
-                return 13207
+                return 11702
             elif pair_data == 'GBPUSD':
-                return 15498
+                return 17755
             elif pair_data == 'USDCAD':
-                return 8729
+                return 8263
             elif pair_data == 'USDJPY':
-                return 14991
+                return 22395
             elif pair_data == 'XAUUSD':
-                return 9652
+                return 14646
             elif pair_data == 'GBPJPY':
-                return 22234
+                return 30042
             elif pair_data == 'EURGBP':
-                return 10405
+                return 10413
 
 
 def call_api(currency):
@@ -91,13 +91,17 @@ def read_data(reference):
 def calculate_data(pair):
     data = read_data('/' + pair + '_' + multiplier + timespan)
     notify_ref = '/' + pair + '_' + multiplier + timespan + '_Trade'
-    data['EMA'] = ema.calculate_ema(data['Open'], 30, 15)
-    data['EMA2'] = ema.calculate_ema(data['Open'], 60, 15)
-    data1 = emax.ema_xcandle(pair, data, 30,
+    ema_combine = ema.get_best_single_ema(pair, multiplier, timespan)
+    data['EMA'] = ema.calculate_ema(data['Open'], ema_combine[0], ema_combine[1])
+    data1 = emax.ema_xcandle(pair, data, ema_combine[0],
                              emax.get_best_xcandle(pair, multiplier, timespan),
                              emax.get_reversal(pair, multiplier, timespan),
                              notify_ref)
-    data2 = ema2.ema2_xcandle(pair, data, 60,
+
+    ema_combine = ema.get_best_double_ema(pair, multiplier, timespan)
+    data['EMA'] = ema.calculate_ema(data['Open'], ema_combine[1], ema_combine[0])
+    data['EMA2'] = ema.calculate_ema(data['Open'], ema_combine[2], ema_combine[0])
+    data2 = ema2.ema2_xcandle(pair, data, ema_combine[2],
                               ema2.get_best_xcandle(pair, multiplier, timespan),
                               ema2.get_reversal(pair, multiplier, timespan),
                               notify_ref)

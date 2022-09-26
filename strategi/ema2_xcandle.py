@@ -7,62 +7,63 @@ from firebase_admin import db
 
 from indicator import ema
 from lib import pair_decimal as pair_decimal
+from lib.fcm import send_notif
 
 
 def get_best_xcandle(pair, multiplier, timespan):
     if timespan == 'hour':
         if multiplier == '1':
-            if pair == 'GBPUSD':  # 27F, 19T, 17T
-                return 27
-            elif pair == 'XAUUSD':  # 21F, 16F, 16T
-                return 21
-            elif pair == 'USDJPY':  # 22F, 19F, 22T
-                return 25
-            elif pair == 'AUDUSD':  # 29F,13F,25T
-                return 29
-            elif pair == 'EURUSD':  # 29F,20F,5T
-                return 28
-            elif pair == 'USDCAD':  # 27F, 17T, 5F
-                return 7
-            elif pair == 'GBPJPY':  # 21F, 24F
-                return 21
-            elif pair == 'EURGBP':  # 15T, 15F, 16T
-                return 15
-            elif pair == 'GBPCAD':  # 26F
-                return 26
-            elif pair == 'GBPAUD':  # 29F
-                return 29
-            elif pair == 'EURJPY':  # 11T, 15T, 16T
-                return 11
-            elif pair == 'AUDCAD':  # 22F, 28F, 14F
-                return 22
-            elif pair == 'EURAUD':  # 28T, 26T
-                return 22
-            elif pair == 'AUDJPY':  # 23F
+            if pair == 'AUDUSD':
+                return 20
+            elif pair == 'EURUSD':
                 return 23
-            elif pair == 'CADJPY':  # 28F, 23F, 10T
+            elif pair == 'GBPUSD':
+                return 19
+            elif pair == 'USDCAD':
+                return 11
+            elif pair == 'USDJPY':
+                return 29
+            elif pair == 'XAUUSD':
+                return 16
+            elif pair == 'GBPJPY':
+                return 21
+            elif pair == 'EURGBP':
+                return 15
+            elif pair == 'GBPCAD':
+                return 23
+            elif pair == 'GBPAUD':
+                return 25
+            elif pair == 'EURJPY':
+                return 27
+            elif pair == 'AUDCAD':
                 return 28
-            elif pair == 'EURCAD':  # 14F, 28F
+            elif pair == 'EURAUD':
+                return 23
+            elif pair == 'AUDJPY':
                 return 14
+            elif pair == 'CADJPY':
+                return 28
+            elif pair == 'EURCAD':
+                return 11
 
 
 def get_reversal(pair, multiplier, timespan):
     if timespan == 'hour':
         if multiplier == '1':
-            if pair == 'GBPUSD':
-                return True
-            elif pair == 'USDJPY':
-                return True
-            elif pair == 'AUDUSD':
+            if pair == 'AUDUSD':
                 return False
             elif pair == 'EURUSD':
                 return False
+            elif pair == 'GBPUSD':
+                return True
             elif pair == 'USDCAD':
                 return False
+            elif pair == 'USDJPY':
+                return False
             elif pair == 'XAUUSD':
-                return False
+                return True
             elif pair == 'GBPJPY':
-                return False
+                return True
             elif pair == 'EURGBP':
                 return True
             elif pair == 'GBPCAD':
@@ -70,17 +71,17 @@ def get_reversal(pair, multiplier, timespan):
             elif pair == 'GBPAUD':
                 return False
             elif pair == 'EURJPY':
-                return True
+                return False
             elif pair == 'AUDCAD':
                 return False
             elif pair == 'EURAUD':
-                return True
+                return False
             elif pair == 'AUDJPY':
                 return False
             elif pair == 'CADJPY':
-                return False
+                return True
             elif pair == 'EURCAD':
-                return False
+                return True
 
 
 def check_cross(data, ema2):
@@ -162,6 +163,7 @@ def sendnotify(notify, type_trade, pair, price):
     ref.child(str(current_time_ms)).set({
         'messages': messages
     })
+    send_notif("test", pair, messages)
 
 
 def ema2_xcandle(pair, data, ema2, max_candle=3, reversal=True, notify=''):

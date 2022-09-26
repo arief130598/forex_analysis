@@ -19,7 +19,7 @@ from strategi import ema_xcandle, ema2_xcandle, ema_xvolume
 from indicator_bokeh import volume_chart, ema_chart, bollinger_band_chart, stochastic_oscilator_chart
 
 if __name__ == '__main__':
-    pair = 'AUDJPY'
+    pair = 'EURCAD'
     multiplier = '1'
     # minute, hour, day, week, month, quarter, year
     timespan = 'hour'
